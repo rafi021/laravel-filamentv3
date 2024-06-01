@@ -50,7 +50,11 @@ class ProductResource extends Resource
                 TextColumn::make('price')
                     ->sortable()
                     ->searchable()
-                    ->toggleable(),
+                    ->toggleable()
+                    ->money('usd')
+                    ->getStateUsing(function (Product $record): float {
+                        return $record->price / 100;
+                    }),
             ])
             ->filters([])
             ->actions([
