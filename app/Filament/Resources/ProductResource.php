@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\ProductStatus;
 use Filament\Forms;
 use Filament\Tables;
 use App\Models\Product;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\ProductResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\ProductResource\RelationManagers;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 
 class ProductResource extends Resource
@@ -36,6 +38,15 @@ class ProductResource extends Resource
                     ->rule('numeric')
                     ->minValue(1)
                     ->maxValue(1000),
+                Select::make('status')
+                    ->options([
+                        'in stock' => ProductStatus::InStock->value,
+                        'sold out' => ProductStatus::SoldOut->value,
+                        'comming soon' => ProductStatus::CommingSoon->value,
+                    ]),
+                Select::make('category_id')
+                    ->relationship('category', 'name'),
+
             ]);
     }
 
@@ -55,6 +66,8 @@ class ProductResource extends Resource
                     ->getStateUsing(function (Product $record): float {
                         return $record->price / 100;
                     }),
+                TextColumn::make('status'),
+                TextColumn::make('category.name')
             ])
             ->filters([])
             ->actions([

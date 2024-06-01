@@ -16,13 +16,11 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        // User::factory()->updateOrCreate([
-        //     'name' => 'Test User',
-        //     'email' => 'user@test.com',
-        //     'password' => Hash::make(1234)
-        // ]);
+
 
         $this->call([
+            AdminSeeder::class,
+            CategorySeeder::class,
             ProductSeeder::class
         ]);
     }
